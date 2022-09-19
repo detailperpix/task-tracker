@@ -1,24 +1,37 @@
 package com.detailperpix.tasktracker.services;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
-public abstract class SQLiteDatabase {
+public final class SQLiteDatabase {
 
-    public static void createDatabase(String filename) {
-        String url = "jdbc:sqlite:./build/db/" + filename;
+    private static Statement statement = null;
 
-        try (Connection conn = DriverManager.getConnection(url)) {
-            if (conn != null) {
-                DatabaseMetaData meta = conn.getMetaData();
-                System.out.println("Driver name " + meta.getDriverName());
-                System.out.println("New DB file has been created");
-            }
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
+    private SQLiteDatabase() {
+
+    }
+
+    public static void createAndUseDatabase(String dir) throws SQLException {
+        String url = "jdbc:sqlite:" + dir;
+        Connection conn = DriverManager.getConnection(url);
+        if (conn != null) {
+            DatabaseMetaData meta = conn.getMetaData();
+            System.out.println("Driver name " + meta.getDriverName());
+            System.out.println("New DB file has been created");
+            statement = conn.createStatement();
+            statement.setQueryTimeout(30);
         }
+
+    }
+
+    public static boolean execQuery(String sql) throws SQLException {
+        return statement.execute(sql);
+    }
+
+    public static ResultSet selectQuery(String sql) throws SQLException {
+        if (statement.execute(sql)) {
+            return statement.getResultSet();
+        }
+        return null;
 
     }
 

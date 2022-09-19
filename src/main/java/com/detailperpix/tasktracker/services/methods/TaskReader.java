@@ -17,8 +17,15 @@ public class TaskReader {
                     String label = result.getString("label");
                     String title = result.getString("title");
                     String desc = result.getString("description");
+
                     long startTime = result.getLong("startTime");
+                    if (result.wasNull()) {
+                        startTime = -1;
+                    }
                     long endTime = result.getLong("endTime");
+                    if (result.wasNull()) {
+                        endTime = -1;
+                    }
                     tasks.add(new Task(labelId, label, title, desc, startTime, endTime));
                 } while (result.next());
             }

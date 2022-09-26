@@ -56,20 +56,26 @@ public class TaskReader {
         try (ResultSet result = SQLiteDatabase.selectQuery(sql)) {
             if (result != null) {
                 while (result.next()) {
+                    String title = result.getString("title");
+                    long startTime = result.getLong("startTime");
+                    Task.Builder task = new Task.Builder()
+                            .baseTask(title, startTime);
+
                     int labelId = result.getInt("labelId");
                     String label = result.getString("label");
-                    String title = result.getString("title");
+                    if (labelId > 0) {
+                        task.label(labelId, label);
+                    }
                     String desc = result.getString("description");
+                    if (desc != null) {
+                        task.description(desc);
+                    }
 
-                    long startTime = result.getLong("startTime");
-                    if (result.wasNull()) {
-                        startTime = -1;
-                    }
                     long endTime = result.getLong("endTime");
-                    if (result.wasNull()) {
-                        endTime = -1;
+                    if (!result.wasNull()) {
+                        task.endTime(endTime);
                     }
-                    tasks.add(new Task(labelId, label, title, desc, startTime, endTime));
+                    tasks.add(task.build());
                 }
             }
         } catch (SQLException e) {

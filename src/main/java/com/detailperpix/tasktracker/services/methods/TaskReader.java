@@ -11,18 +11,18 @@ import java.util.ArrayList;
 public class TaskReader {
     public static ArrayList<Task> getTask() {
         String sql = new SQL.Builder()
-                .selectClause(
+                .select(
                         new String[]{
                                 "startTime",
                                 "title",
                                 "id as labelId",
                                 "l.label",
                                 "description",
-                                "endTime"},
-                        new String[]{
-                                "task t",
-                                "label l"}
-                )
+                                "endTime"}
+
+                ).from(new String[]{
+                        "task t",
+                        "label l"})
                 .whereClause()
                 .conditionClause("t.label = l.id")
                 .build();
@@ -31,15 +31,15 @@ public class TaskReader {
 
     public static ArrayList<Task> getTaskByLabel(int labelId) {
         String sql = new SQL.Builder()
-                .selectClause(new String[]{
-                        "startTime",
-                        "title",
-                        "id as labelId",
-                        "l.label",
-                        "description",
-                        "endTime"
-                },
-                        new String[]{
+                .select(new String[]{
+                                "startTime",
+                                "title",
+                                "id as labelId",
+                                "l.label",
+                                "description",
+                                "endTime"
+                        })
+                .from(new String[]{
                                 "task t",
                                 "label l"
                         })
@@ -48,7 +48,7 @@ public class TaskReader {
                 .andClause(String.format("t.label=%d", labelId))
                 .build();
         System.out.println(sql);
-       return queryTask(sql);
+        return queryTask(sql);
     }
 
     public static ArrayList<Task> queryTask(String sql) {

@@ -13,12 +13,15 @@ public class SQL {
             sql = "";
         }
         // select clause
-        public Builder selectClause(String[] properties, String[] tableName) {
+        public Builder select(String[] properties) {
             sql = sql
                     + "SELECT "
-                    + String.join(", ", properties)
-                    + " FROM "
-                    + String.join(", ", tableName);
+                    + String.join(", ", properties);
+            return this;
+        }
+
+        public Builder from(String[] tableName) {
+            sql = sql + " FROM " + String.join(", ", tableName);
             return this;
         }
 
@@ -80,7 +83,7 @@ public class SQL {
 
         // create table clause
         // include if not exists
-        public Builder createTable(String tableName, boolean includeIfNotExists) {
+        private Builder createTable(String tableName, boolean includeIfNotExists) {
             sql = sql + "CREATE TABLE ";
             if (includeIfNotExists) {
                 sql = sql + "IF NOT EXISTS ";
@@ -89,7 +92,15 @@ public class SQL {
             return this;
         }
 
-        public Builder dropTable(String tableName, boolean includeIfExists) {
+        public Builder createTableIfNotExists(String tableName) {
+            return createTable(tableName, true);
+        }
+
+        public Builder createTable(String tableName) {
+            return createTable(tableName, false);
+        }
+
+        private Builder dropTable(String tableName, boolean includeIfExists) {
             sql = sql + "DROP TABLE ";
             if (includeIfExists) {
                 sql = sql + "IF EXISTS ";
@@ -98,6 +109,13 @@ public class SQL {
             return this;
         }
 
+        public Builder dropTableIfExists(String tableName) {
+            return dropTable(tableName, true);
+        }
+
+        public Builder dropTable(String tableName) {
+            return dropTable(tableName, false);
+        }
         public String build() {
             return this.sql;
         }

@@ -63,13 +63,13 @@ public class TaskWriter {
 
     public static boolean initTable() {
         String dropLabelSql = new SQL.Builder()
-                .dropTable("label", true)
+                .dropTableIfExists("label")
                 .build();
         String dropTaskSql = new SQL.Builder()
-                .dropTable("task", true)
+                .dropTableIfExists("task")
                 .build();
         String taskSql = new SQL.Builder()
-                .createTable("task", false)
+                .createTable("task")
                 .tableColumn(new String[]{
                         "startTime INTEGER NOT NULL",
                         "title TEXT NOT NULL",
@@ -80,7 +80,7 @@ public class TaskWriter {
                 })
                 .build();
         String labelSql = new SQL.Builder()
-                .createTable("label", false)
+                .createTable("label")
                 .tableColumn(new String[]{
                         "id INTEGER PRIMARY KEY UNIQUE NOT NULL",
                         "label TEXT NOT NULL"

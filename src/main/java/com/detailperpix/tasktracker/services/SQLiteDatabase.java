@@ -23,8 +23,8 @@ public final class SQLiteDatabase {
 
     }
 
-    public static boolean execQuery(String sql) throws SQLException {
-        return statement.execute(sql);
+    public static void execQuery(String sql) throws SQLException {
+        statement.execute(sql);
     }
 
     public static ResultSet selectQuery(String sql) throws SQLException {

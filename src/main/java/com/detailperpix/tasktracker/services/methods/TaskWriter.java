@@ -35,17 +35,7 @@ public class TaskWriter {
         }
     }
 
-    public static boolean addLabel(int labelId, String label) {
-        String sql = String.format("INSERT INTO label(id, label) " +
-                        "VALUES (%d, '%s');",
-                labelId, label);
-        try {
-            SQLiteDatabase.execQuery(sql);
-            return true;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
+
 
     public static boolean updateFinishedTask(Task task) {
         String sql = String.format("UPDATE task SET endTime=%d " +
@@ -83,7 +73,7 @@ public class TaskWriter {
                 .createTable("label")
                 .tableColumn(new String[]{
                         "id INTEGER PRIMARY KEY UNIQUE NOT NULL",
-                        "label TEXT NOT NULL"
+                        "label TEXT NOT NULL UNIQUE"
                 })
                 .build();
         boolean initSuccess = true;

@@ -3,21 +3,18 @@ package com.detailperpix.tasktracker.task;
 import java.util.Date;
 
 public class Task {
-    int labelId;
-    String label;
     String title;
     String desc;
     Date startTime;
     Date endTime;
-
+    Label label;
     private Task(String title, long startTime) {
         setTitle(title);
         setStartTime(startTime);
     }
 
     public Task(Task task) {
-        setLabelId(task.getLabelId());
-        setLabel(task.getLabel());
+        setLabel(task.getLabelId(), task.getLabel());
         setTitle(task.getTitle());
         setDescription(task.getDesc());
         setStartTime(task.getStartTimeInEpochMilliseconds());
@@ -25,8 +22,7 @@ public class Task {
     }
 
     public Task(int labelId, String label, String title, String desc, long startTime, long endTime) {
-        this.labelId = labelId;
-        this.label = label;
+        this.label = new Label(labelId, label);
         setTitle(title);
         setDescription(desc);
         this.startTime = new Date(startTime);
@@ -42,7 +38,7 @@ public class Task {
     }
 
     public String getLabel() {
-        return this.label;
+        return this.label.getLabelDescription();
     }
 
     public String getTitle() {
@@ -54,7 +50,7 @@ public class Task {
     }
 
     public int getLabelId() {
-        return labelId;
+        return this.label.getLabelId();
     }
 
     public void finishTask() {
@@ -86,12 +82,9 @@ public class Task {
         this.desc = desc;
     }
 
-    public void setLabelId(int labelId) {
-        this.labelId = labelId;
-    }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLabel(int labelId, String label) {
+        this.label = new Label(labelId, label);
     }
 
     public void setStartTime(long time) {
@@ -124,8 +117,7 @@ public class Task {
         }
 
         public Builder label(int labelId, String label) {
-            task.setLabelId(labelId);
-            task.setLabel(label);
+            task.setLabel(labelId, label);
             return this;
         }
 

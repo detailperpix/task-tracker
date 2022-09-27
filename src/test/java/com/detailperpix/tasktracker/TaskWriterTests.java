@@ -1,5 +1,6 @@
 package com.detailperpix.tasktracker;
 
+import com.detailperpix.tasktracker.services.methods.LabelWriter;
 import com.detailperpix.tasktracker.services.methods.TaskReader;
 import com.detailperpix.tasktracker.services.methods.TaskWriter;
 import com.detailperpix.tasktracker.services.SQLiteDatabase;
@@ -37,13 +38,12 @@ public class TaskWriterTests {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("Done");
     }
 
     @Test
     public void addLabel() {
-        assert TaskWriter.addLabel(1, "label");
-        assert TaskWriter.addLabel(2, "label0");
+        assert LabelWriter.addLabel(1, "label");
+        assert LabelWriter.addLabel(2, "label0");
     }
 
     @Test
